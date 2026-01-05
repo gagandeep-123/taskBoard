@@ -5,39 +5,79 @@ const TaskCard = ({ task, onEdit, onDelete }) => {
     Low: "#52c41a"
   };
 
-  const styles = {
-    card: {
-      background: "#fff",
-      padding: 10,
-      marginBottom: 10,
-      borderRadius: 8,
-      boxShadow: "0 2px 6px rgba(0,0,0,0.12)",
-      borderLeft: `5px solid ${colors[task.priority]}`,
-      cursor: "grab"
-    },
-    actions: {
-      display: "flex",
-      justifyContent: "space-between",
-      marginTop: 6
-    }
-  };
-
   return (
     <div
-      style={styles.card}
       draggable
       onDragStart={e => e.dataTransfer.setData("id", task.id)}
+      style={{
+        background: "#fafafa",
+        padding: 12,
+        marginBottom: 12,
+        borderRadius: 10,
+        borderLeft: `6px solid ${colors[task.priority]}`,
+        boxShadow: "0 3px 8px rgba(0,0,0,0.1)",
+        cursor: "grab"
+      }}
     >
       <strong>{task.title}</strong>
-      <p style={{ fontSize: 13, margin: "4px 0" }}>
+
+      <p
+        style={{
+          fontSize: 13,
+          margin: "6px 0",
+          color: "#555"
+        }}
+      >
         {task.description}
       </p>
 
-      <div style={styles.actions}>
-        <small>{task.priority}</small>
-        <div>
-          <button onClick={() => onEdit(task)}>Edit</button>
-          <button onClick={() => onDelete(task.id)}>✕</button>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center"
+        }}
+      >
+        <span
+          style={{
+            fontSize: 12,
+            padding: "2px 8px",
+            borderRadius: 12,
+            background: colors[task.priority],
+            color: "#fff"
+          }}
+        >
+          {task.priority}
+        </span>
+
+        <div style={{ display: "flex", gap: 6 }}>
+          <button
+            style={{
+              border: "none",
+              background: "#1677ff",
+              color: "#fff",
+              padding: "4px 8px",
+              borderRadius: 4,
+              cursor: "pointer"
+            }}
+            onClick={() => onEdit(task)}
+          >
+            Edit
+          </button>
+
+          <button
+            style={{
+              border: "none",
+              background: "#ff4d4f",
+              color: "#fff",
+              padding: "4px 8px",
+              borderRadius: 4,
+              cursor: "pointer"
+            }}
+            onClick={() => onDelete(task.id)}
+          >
+            ✕
+          </button>
         </div>
       </div>
     </div>
