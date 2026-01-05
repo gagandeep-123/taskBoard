@@ -23,6 +23,8 @@ const TaskBoard = () => {
     );
   };
 
+  const totalTasks = tasks.length;
+
   return (
     <div
       style={{
@@ -60,50 +62,74 @@ const TaskBoard = () => {
 
       {/* Columns */}
       <div style={{ display: "flex", gap: 16 }}>
-        {COLUMNS.map(col => (
-          <div
-            key={col}
-            onDragOver={e => e.preventDefault()}
-            onDrop={e => handleDrop(e, col)}
-            style={{
-              flex: 1,
-              background: "#fff",
-              borderRadius: 10,
-              padding: 14,
-              minHeight: 450,
-              boxShadow: "0 4px 10px rgba(0,0,0,0.08)"
-            }}
-          >
-            <h4
+        {COLUMNS.map(col => {
+          const columnTasks = tasks
+            .filter(t => t.status === col)
+            .sort((a, b) => {
+              const priorityOrder = { High: 1, Medium: 2, Low: 3 };
+              return priorityOrder[a.priority] - priorityOrder[b.priority];
+            });
+
+          const columnCount = columnTasks.length;
+
+          return (
+            <div
+              key={col}
+              onDragOver={e => e.preventDefault()}
+              onDrop={e => handleDrop(e, col)}
               style={{
-                marginBottom: 12,
-                paddingBottom: 8,
-                borderBottom: "1px solid #eee",
-                textAlign: "center"
+                flex: 1,
+                background: "#fff",
+                borderRadius: 10,
+                padding: 14,
+                minHeight: 450,
+                boxShadow: "0 4px 10px rgba(0,0,0,0.08)"
               }}
             >
-              {col.replaceAll("_", " ")}
-            </h4>
+              <h4
+                style={{
+                  marginBottom: 12,
+                  paddingBottom: 8,
+                  borderBottom: "1px solid #eee",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 8,
+                  fontSize: 14,
+                  fontWeight: 600
+                }}
+              >
+                {col.replaceAll("_", " ")}
 
-            {tasks
-  .filter(t => t.status === col)
-  .sort((a, b) => {
-    const priorityOrder = { High: 1, Medium: 2, Low: 3 };
-    return priorityOrder[a.priority] - priorityOrder[b.priority];
-  })
-  .map(task => (
-    <TaskCard
-      key={task.id}
-      task={task}
-      onEdit={setActiveTask}
-      onDelete={id =>
-        setTasks(tasks.filter(t => t.id !== id))
-      }
-    />
-  ))}
+                {columnCount > 0 && (
+                  <span
+                    style={{
+                      padding: "2px 8px",
+                      borderRadius: 999,
+                      background: "#f0f2f5",
+                      fontSize: 12,
+                      fontWeight: 500,
+                      color: "#595959"
+                    }}
+                  >
+                    {columnCount}/{totalTasks}
+                  </span>
+                )}
+              </h4>
 
-          </div>
-        ))}
+              {columnTasks.map(task => (
+                <TaskCard
+                  key={task.id}
+                  task={task}
+                  onEdit={setActiveTask}
+                  onDelete={id =>
+                    setTasks(tasks.filter(t => t.id !== id))
+                  }
+                />
+              ))}
+            </div>
+          );
+        })}
       </div>
 
       {activeTask !== null && (
