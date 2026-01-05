@@ -71,6 +71,8 @@ const TaskModal = ({ task, onSave, onClose }) => {
             style={{
               color: "#ff4d4f",
               fontSize: 12,
+              width: "100%",
+              textAlign: "left",
               marginBottom: 8
             }}
           >
